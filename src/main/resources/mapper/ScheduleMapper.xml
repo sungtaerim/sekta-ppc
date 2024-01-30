@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sekta.ppc.dao.mapper.ScheduleMapper">
+
+    <resultMap id="scheduleEntity" type="com.sekta.ppc.dao.entity.Schedule">
+        <id property="id" column="id"/>
+        <result property="morningFrom" column="morning_from"/>
+        <result property="morningTo" column="morning_to"/>
+        <result property="eveningFrom" column="evening_from"/>
+        <result property="eveningTo" column="evening_to"/>
+        <result property="weekend" column="weekend"/>
+        <result property="dayOfWeek" column="day_of_week"/>
+<!--        <association property="user" resultMap="userEntity"/>-->
+    </resultMap>
+
+    <resultMap id="userEntity" type="com.sekta.ppc.dao.entity.User">
+        <id property="id" column="id"/>
+        <result property="ppcLogin" column="ppc_login"/>
+        <result property="ppcPassword" column="ppc_password"/>
+        <result property="ppcToken" column="ppc_token"/>
+        <result property="state" column="state"
+                typeHandler="com.sekta.ppc.dao.handler.BotStateHandler"/>
+    </resultMap>
+
+    <select id="selectByUserIdAndDay" resultMap="scheduleEntity">
+        select *
+        from schedule s
+<!--        inner join users u on u.id = s.user_id-->
+        where user_id = #{userId}
+        and day_of_week = #{day}
+    </select>
+
+    <select id="selectByUserId" resultMap="scheduleEntity">
+        select *
+        from schedule s
+        <!--        inner join users u on u.id = s.user_id-->
+        where user_id = #{userId}
+    </select>
+
+    <select id="selectAllCustomScheduleUsers" resultMap="scheduleEntity">
+        select distinct *
+        from users u
+        join schedule s on s.user_id = u.id
+        where evening_from is null
+    </select>
+
+    <update id="update">
+        update schedule
+        set morning_from = #{morningFrom}
+            , morning_to = #{morningTo}
+            , evening_from = #{eveningFrom}
+            , evening_to = #{eveningTo}
+            , weekend = #{weekend}
+        where user_id = #{user.id} and day_of_week = #{dayOfWeek}
+    </update>
+
+    <update id="updateWeekend">
+        update schedule
+        set weekend = true
+        , morning_to = null
+        , evening_from = null
+        , evening_to = null
+        where user_id = #{userId} and day_of_week = #{weekend}
+    </update>
+
+    <insert id="insert">
+        insert into schedule (user_id, morning_from, morning_to, evening_from, evening_to, weekend, day_of_week)
+        values (#{user.id},
+                #{morningFrom},
+                #{morningTo},
+                #{eveningFrom},
+                #{eveningTo},
+                #{weekend},
+                #{dayOfWeek})
+    </insert>
+
+</mapper>

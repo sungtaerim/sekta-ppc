@@ -1,0 +1,37 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.3.3.RELEASE'
+    id 'io.franzbecker.gradle-lombok' version '4.0.0'
+    id 'groovy'
+    id 'war'
+}
+
+group 'org.example'
+version ''
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.telegram:telegrambots-spring-boot-starter:6.1.0'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc:2.7.5'
+    implementation group: 'io.vavr', name: 'vavr', version: '0.9.0'
+    implementation 'org.apache.httpcomponents.client5:httpclient5:5.1.3'
+    implementation 'org.apache.httpcomponents.client5:httpclient5-fluent:5.1.3'
+    implementation 'org.apache.httpcomponents.client5:httpclient5-cache:5.1.3'
+    implementation 'org.apache.httpcomponents.client5:httpclient5-win:5.1.3'
+    implementation 'com.typesafe.akka:akka-http-jackson_2.12:10.1.8'
+    implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1' // https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple
+    implementation 'org.springframework.boot:spring-boot-starter:2.7.5'
+    implementation 'org.springframework.boot:spring-boot-starter-web:2.7.5'
+    compileOnly 'org.projectlombok:lombok:1.18.24'
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+    implementation 'org.mybatis:mybatis:3.5.11'
+    implementation 'org.mybatis:mybatis-spring:2.0.7'
+    runtimeOnly 'org.postgresql:postgresql:42.5.0'
+}
+
+test {
+    useJUnitPlatform()
+}
